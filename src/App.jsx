@@ -1,34 +1,28 @@
-import React, { useState, useEffect} from 'react';
-
-
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 function App() {
-const [render, setRender] = useState(true);
-  useEffect(()=>{
-  setTimeout(() =>{
-    setRender(false);
+  const [todos, setTodos] = useState([])
 
-  },10000)
-},[]);
+  useEffect(() => {
+    axios.get("https://sum-server.100xdevs.com/todos")
+      .then(res => {
+        setTodos(res.data.todos);
+      })
+  }, [])
 
-return (
-  <>
-   {render ? <MyComponent /> : <div></div>}
-  </>
-)
+  return (
+    <>
+      {todos.map(todo => <Track todo={todo} />)}
+    </>
+  )
 }
 
-function MyComponent() {
-  useEffect(() => {
-    console.error("component mounted");
-
-    return ()  => {
-      console.log("componment unmounted");
-    };
-  }, []);
-
+function Track({ todo }) {
   return <div>
-    From inside my component
+    {todo.title}
+    <br />
+    {todo.description}
   </div>
 }
 
