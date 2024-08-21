@@ -2,15 +2,21 @@ import { useEffect, useState } from 'react';
 
 
 
-function useInterval(fn, timeout){
-  useEffect(() => {
-    setInterval(() => {
-      fn()
-    }, timeout);
-  })
-}
+
+
+
+
 function App() {
   const [count, setCount] = useState(0);
+
+
+  const useInterval = (callback, delay) => {
+    useEffect(() => {
+      const intervalId = setInterval(callback, delay);
+  
+      return () => clearInterval(intervalId);
+    }, [callback, delay]);
+  };
 
   useInterval(() => {
     setCount(c => c + 1);
