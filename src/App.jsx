@@ -1,32 +1,36 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import useDebounce from './useDebounce';
 
+function useDebounce(value, timeout){
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setDebouncedValue(value);
+    }, timeout);
 
-
-
-
-
-function App() {
-  const [count, setCount] = useState(0);
-
-
-  const useInterval = (callback, delay) => {
-    useEffect(() => {
-      const intervalId = setInterval(callback, delay);
+    return () => {
+      clearTimeout(timeoutNumber);
+    }
   
-      return () => clearInterval(intervalId);
-    }, [callback, delay]);
-  };
+  },[value]);
+  return debouncedValue;
+}
 
-  useInterval(() => {
-    setCount(c => c + 1);
-  }, 1000)
+function App(){
+  const [inputValue, setInputValue] = useState('');
+  const debouncedValue = useDebounce(value, 500); 
+
+
+
 
   return (
     <>
-      Timer is at {count}
-    </>
+    Debounced value is {debouncedValue}
+    <input type="text" onChange={e => setInputValue(e.target.value)} 
+    />
+     </>
   )
-}
+};
 
-export default App
+export default SearchBar;
